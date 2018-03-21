@@ -7,7 +7,6 @@ public:
         array = new int[100];                     //д╛хосп100╦Ж
         size = 0;
     }
-
     ~MiniHeap(){
         delete [] array;
     }
