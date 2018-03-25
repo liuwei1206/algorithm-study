@@ -1,0 +1,1 @@
+the shortest distance between any node(任意节点之间的最短距离).
