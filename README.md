@@ -13,4 +13,8 @@ the code I write when studying the book &lt;&lt;algorithm design>>, all the code
 
 6.prime algorithm(最小生成树算法，通过点)
 
-7.kruskal算法(最小生成树算法，通过边)
+7.kruskal algorithm(最小生成树算法，通过边)
+
+8.tarjan algorithm(有向图强连通分量，一次遍历)
+
+9.kosaraju algorithm(有向图强连通分量， 两次遍历)
