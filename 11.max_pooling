@@ -1,0 +1,71 @@
+def max_pooling_1D(A, size):
+	"""
+	求解数组A, size大小的max_pooling值, 其中步长为1
+
+	思路, 我们肯定得维护一个size窗口, 让每个窗口都可以对应一个值; 需要注意的是, 因为时间复杂度为O(n), 所以我们肯定得在边
+	滑动的过程中, 边记录这个值! 不过我们可以在(i+1)次滑动中, 记录第i次的值, 这样做的目的是, 第i次的最大值一定在队列的第一个位置, 可以
+	避免再搜索
+	"""
+	max_result = []
+	index = []
+
+	# 最开始的前size个, 对应第一个窗口的max_pooling值
+	for i in range(size):
+		# 把窗口内比当前值小的历史值给剔除掉
+		while len(index) > 0 and A[index[-1]] <= A[i]:
+			index.pop(-1)
+
+		index.append(i)
+
+	for i in range(size, len(A)):
+		# 第 j + 1 个窗口开始保留第j个窗口的值, 注意前一个窗口范围内最大值肯定在index[0]的位置
+		max_result.append(A[index[0]])
+
+		# 更新这个窗口内的值, 需要剔除的值包括: 1.窗口内比当前值还小的值, 2.窗口以外的值
+		while len(index) > 0 and A[index[-1]] <= A[i]:
+			index.pop(-1)
+		if len(index) > 0 and index[0] <= (i - size):
+			index.pop(0)
+		index.append(i)
+
+	# 最后一个窗口的值放在最后一步保存
+	max_result.append(A[index[0]])
+
+	return max_result
+
+import numpy as np
+
+def max_pooling_2D(A, k):
+	"""
+	二维度的max, 我们可以先对每一行做max_pooling_1D, 然后再对行的max_pooling_1D的结果中每一列做max_pooling_1D
+	"""
+	max_result_each_row = []
+	row = len(A)
+	col = len(A[0])
+
+	max_result = []
+
+	for i in range(row):
+		max_result_each_row.append(max_pooling_1D(A[i], k))
+	max_result_each_row = np.array(max_result_each_row)
+	for j in range(col - k + 1):
+		max_result.append(max_pooling_1D(max_result_each_row[:, j], k))
+
+	max_result = np.array(max_result)
+	for i in range(row - k + 1):
+		print(max_result[:, i])
+
+	return max_result
+
+
+
+A = [3, 1, 4, 2, 3, 6, 4, 8, 9, 10, 7, 6]
+k = 3
+
+res = max_pooling(A, k)
+print(res)
+
+A = [[4, 8, 9, 8], [5, 7, 7, 6], [1, 2, 7, 8], [3, 5, 5, 5]]
+k = 2
+
+max_pooling_2D(A, k)
