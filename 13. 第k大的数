@@ -1,0 +1,39 @@
+    /*
+    *   我们的目标是找到第k大的数，也就是在这个数左边的(n-k-1)都小于该数, 而该数右边的(k-1)个都大于
+    *   该数；而无需关心左右两边那些数字是不是有序排列的。
+    *   这个和快排的思想很像，我们找一个轴，然后将比轴小的放到左边，比轴大的放到右边，如果轴的
+    *   索引刚好是(n-k),那么说明就是第k大的数
+     */
+    public int kmax(int[] A, int l, int r, int k){
+        int pivot = A[l];
+        int left = l + 1;
+        int right = r;
+        while(left <= right){
+            //找到一个小于pivot的
+            while(right >= left && A[right] >= pivot)
+                right--;
+            //找到一个大于pivot的
+            while(left <= right && A[left] < pivot)
+                left++;
+
+            if(right < left)
+                break;
+
+            //交换，并判断位置
+            int tmp = A[right];
+            A[right] = A[left];
+            A[left] = tmp;
+            right--;
+            left++;
+        }
+
+        //判断轴的位置
+        A[l] = A[right];
+        A[right] = pivot;
+        if(right == A.length - k)
+            return pivot;
+        else if(right < A.length - k)
+            return kmax(A, right+1, r, k);
+        else
+            return kmax(A, l, right-1, k);
+    }
