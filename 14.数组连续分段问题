@@ -1,0 +1,38 @@
+ /*
+    *   数组连续分段问题是一种很经典的动态规划问题。以下面代码为例：leetcode 813. Largest Sum of Averages
+    *   将数组A切分为k个小数组, 然后将所有小数组的平均值加起来, 求这个平均值之和的最大值
+    *
+    *   我们假设dp[i][j]为数组A中前i个元素，恰好分成j个小数组的平均值和的最大值
+    *   则有:
+    *       dp[i][j] = max(dp[i][j], dp[z][j-1] + (z到i之间构成的数组的平均值))，需要注意的是，这个z可以是j-1到i之前的
+    *       任意值
+    *       举个例子dp[5][2], 那么它的最大取值是max{dp[1][1] + A[2:5]/4, dp[2][1] + A[3:5] / 2, dp[3][1] + A[4:5]/2， dp[4][1]+A[5]}
+    *       通过这样一步一步扩展总的元素个数
+     */
+    public double largestSumOfAverage(int[] A, int k){
+        int l = A.length;
+        double[][] dp = new double[l+1][k+1];
+        int[] sum = new int[l+1];
+        for(int i = 1; i <= l; i++){
+            sum[i] = sum[i-1] + A[i-1];
+            dp[i][1] = sum[i] * 1.0 / i;
+        }
+
+        for(int i = 2; i <= l; i++){
+            for(int j = 2; j <=k && j <= i; j++ ){
+                for(int z = j-1; z < i; z++){
+                    double val = dp[z][j-1] + (sum[i] - sum[z]) * 1.0 / (i - z);
+                    if(dp[i][j] < val)
+                        dp[i][j] = val;
+                }
+            }
+        }
+
+        for(int i = 1; i <= l; i++){
+            for(int j = 1; j <=k; j++){
+                System.out.print(dp[i][j] + " ");
+            }
+            System.out.println();
+        }
+        return dp[l][k];
+    }
