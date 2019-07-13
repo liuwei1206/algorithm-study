@@ -24,3 +24,5 @@ the code I write when studying the book &lt;&lt;algorithm design>>, all the code
 12.两个有序数组求交集
 
 13.数组中第k大的数，java实现
+
+14.数组分为k个连续小数组问题
